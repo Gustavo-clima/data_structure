@@ -5,7 +5,7 @@
 
 typedef struct
 {
-	int *array_pointer;
+	int *array;
 	int lenght;
 	int end;
 }ARRAY;
@@ -18,22 +18,22 @@ void get_int(int *integer)
 	sscanf(user_input, "%d", integer);				
 }
 
-void display_array(ARRAY array)
+void display_array(ARRAY adt)
 {
 	int i;
 
 	printf("\n");
 
-	for (i = 0; i <= array.end; ++i)
+	for (i = 0; i <= adt.end; ++i)
 	{
-		printf("  %d  ", array.array_pointer[i]);
+		printf("  %d  ", adt.array[i]);
 		printf("|");
 	}
 }
 
-bool isEmpty(ARRAY array)
+bool isEmpty(ARRAY adt)
 {
-	if(array.end == (-1))
+	if(adt.end == (-1))
 	{
 		return true;
 	}
@@ -43,9 +43,9 @@ bool isEmpty(ARRAY array)
 	}
 }
 
-bool isFull(ARRAY array)
+bool isFull(ARRAY adt)
 {
-	if(array.end >= (array.lenght - 1))
+	if(adt.end >= (adt.lenght - 1))
 	{
 		return true;
 	}
@@ -55,13 +55,13 @@ bool isFull(ARRAY array)
 	}
 }
 
-bool isSorted(ARRAY *array)
+bool isSorted(ARRAY *adt)
 {
 	int i;
 
-	for (i = 0; i <= array->end; ++i)
+	for (i = 0; i <= adt->end; ++i)
 	{
-		if(array->array_pointer[i] > array->array_pointer[i])
+		if(adt->array[i] > adt->array[i])
 		{
 			return false;
 		}
@@ -70,65 +70,65 @@ bool isSorted(ARRAY *array)
 	}
 }
 
-void insert_sort(ARRAY *array, int key)
+void insert_sort(ARRAY *adt, int key)
 {
 	int i;
 
-	i = (array->end);
+	i = (adt->end);
 
-	while(array->array_pointer[i] > key)
+	while(adt->array[i] > key)
 	{
-		array->array_pointer[i + 1] = array->array_pointer[i];
+		adt->array[i + 1] = adt->array[i];
 
 		--i;
 	}
 
-	array->array_pointer[i + 1] = key;
-	++array->end;
+	adt->array[i + 1] = key;
+	++adt->end;
 }
 
-void set(ARRAY *array, int key, int position)
+void set(ARRAY *adt, int key, int position)
 {
-	array->array_pointer[position] = key;
+	adt->array[position] = key;
 }
 
-int get(ARRAY *array, int position)
+int get(ARRAY *adt, int position)
 {
-	return array->array_pointer[position];
+	return adt->array[position];
 }
 
-void append(ARRAY *array, int key)
+void append(ARRAY *adt, int key)
 {
-	array->array_pointer[array->end + 1] = key;
-	++array->end;
+	adt->array[adt->end + 1] = key;
+	++adt->end;
 }
 
-void delete_by_position(ARRAY *array, int position)
-{
-	int i;
-
-	for (i = position; i < array->end; ++i)
-	{
-		array->array_pointer[i] = array->array_pointer[i + 1];
-	}
-
-	--array->end;
-}
-
-void insert_on_position(ARRAY *array, int key, int position)
+void delete_by_position(ARRAY *adt, int position)
 {
 	int i;
 
-	for (i = array->end; i >= position; --i)
+	for (i = position; i < adt->end; ++i)
 	{
-		array->array_pointer[i + 1] = array->array_pointer[i];
+		adt->array[i] = adt->array[i + 1];
 	}
 
-	array->array_pointer[position] = key;
-	++array->end;
+	--adt->end;
 }
 
-void initialize_array(ARRAY *array, char **elements)
+void insert_on_position(ARRAY *adt, int key, int position)
+{
+	int i;
+
+	for (i = adt->end; i >= position; --i)
+	{
+		adt->array[i + 1] = adt->array[i];
+	}
+
+	adt->array[position] = key;
+	++adt->end;
+}
+
+void initialize_adt(ARRAY *adt, char **elements)
 {
 	int qtd_of_elements;
 	int i;
@@ -137,71 +137,71 @@ void initialize_array(ARRAY *array, char **elements)
 
 	for (i = 0; i < qtd_of_elements; ++i)
 	{
-		array->array_pointer[i] = atoi(elements[i + 3]);
+		adt->array[i] = atoi(elements[i + 3]);
 	}
 
-	array->end = (qtd_of_elements - 1);
+	adt->end = (qtd_of_elements - 1);
 }
 
-void create_array(ARRAY *array, int lenght)
+void create_adt(ARRAY *adt, int lenght)
 {
-	array->array_pointer = (int *)malloc(lenght * sizeof(int));
+	adt->array = (int *)malloc(lenght * sizeof(int));
 	
-	array->end = -1;
-	array->lenght = lenght;
+	adt->end = -1;
+	adt->lenght = lenght;
 }
 
-void swap(ARRAY **array, int source, int destination)
+void swap(ARRAY **adt, int source, int destination)
 {
 	int aux;
 
-	aux = (*array)->array_pointer[destination];
+	aux = (*adt)->array[destination];
 
-	(*array)->array_pointer[destination] = (*array)->array_pointer[source];
-	(*array)->array_pointer[source] = aux;
+	(*adt)->array[destination] = (*adt)->array[source];
+	(*adt)->array[source] = aux;
 }
 
-void transposition(ARRAY *array, int position)
+void transposition(ARRAY *adt, int position)
 {
-	swap(&array, position, (position - 1));
+	swap(&adt, position, (position - 1));
 }
 
-void move_to_head(ARRAY *array, int position)
+void move_to_head(ARRAY *adt, int position)
 {
-	swap(&array, position, 0);
+	swap(&adt, position, 0);
 }
 
-int linear_search(ARRAY *array, int key)
+int linear_search(ARRAY *adt, int key)
 {
 	int i;
 
-	for (i = 0; i <= array->end; ++i)
+	for (i = 0; i <= adt->end; ++i)
 	{
-		if(key == array->array_pointer[i])
+		if(key == adt->array[i])
 		{
 			return i;
 		}
 	}
 }
 
-int binary_search(ARRAY *array, int key)
+int binary_search(ARRAY *adt, int key)
 {
 	int first;
 	int last;
 	int middle;
 
 	first = 0;
-	last = array->end;
+	last = adt->end;
 
 	while(first <= last)
 	{
 		middle = (first + last) / 2;
 
-		if (key == array->array_pointer[middle])
+		if (key == adt->array[middle])
 		{
 			return middle;
 		}
-		else if(key > array->array_pointer[middle])
+		else if(key > adt->array[middle])
 		{
 			first = (middle + 1);
 		}
@@ -212,17 +212,17 @@ int binary_search(ARRAY *array, int key)
 	}
 }
 
-void reverse_array(ARRAY *array)
+void reverse_adt(ARRAY *adt)
 {
 	int i;
 	int j;
 	int tmp;
 
-	for (i = 0, j = array->end; i <= (array->end / 2); ++i, --j)
+	for (i = 0, j = adt->end; i <= (adt->end / 2); ++i, --j)
 	{
-		tmp = array->array_pointer[i]; 
-		array->array_pointer[i] = array->array_pointer[j];
-		array->array_pointer[j] = tmp; 
+		tmp = adt->array[i]; 
+		adt->array[i] = adt->array[j];
+		adt->array[j] = tmp; 
 	}
 }
 
@@ -273,7 +273,7 @@ char linear_search_menu()
 
 int main(int argc, char **argv)
 {
-	ARRAY array;
+	ARRAY adt;
 	int op;
 
 	if(argc < 3)
@@ -283,17 +283,17 @@ int main(int argc, char **argv)
 	}
 	else if(atoi(argv[2]) != (argc - 3))
 	{
-		printf("Number of numbers has to match inital array size.\n");
+		printf("Number of numbers has to match inital adt size.\n");
 		return 1;
 	}
 	else if(atoi(argv[2]) > atoi(argv[1]))
 	{
-		printf("Too many characters for the array.\n");
+		printf("Too many characters for the aadt\n");
 		return 1;
 	}
 
-	create_array(&array, atoi(argv[1]));
-	initialize_array(&array, argv);
+	create_adt(&adt, atoi(argv[1]));
+	initialize_adt(&adt, argv);
 
 	do
 	{
@@ -305,7 +305,7 @@ int main(int argc, char **argv)
 			case 'P':
 			case 'p':
 			{
-				display_array(array);
+				display_array(adt);
 			}break;
 
 			case 'A':
@@ -313,16 +313,16 @@ int main(int argc, char **argv)
 			{
 				int key;
 				
-				if(isFull(array))
+				if(isFull(adt))
 				{
-					printf("There is no space left in the array!\n");
+					printf("There is no space left in the adt!\n");
 				}
 				else
 				{
 					printf("Type the key you want to include: \n");
 					get_int(&key);
 
-					append(&array, key);
+					append(&adt, key);
 				}
 			}break;
 
@@ -332,9 +332,9 @@ int main(int argc, char **argv)
 				int key;
 				int position;
 
-				if(isFull(array))
+				if(isFull(adt))
 				{
-					printf("There is no space left in the array!\n");
+					printf("There is no space left in the adt!\n");
 				}
 				else
 				{
@@ -342,7 +342,7 @@ int main(int argc, char **argv)
 					get_int(&key);
 					printf("The postion to be inserted: \n");
 					get_int(&position);
-					insert_on_position(&array, key, position);
+					insert_on_position(&adt, key, position);
 				}
 
 
@@ -353,15 +353,15 @@ int main(int argc, char **argv)
 			{
 				int key;
 
-				if(isFull(array))
+				if(isFull(adt))
 				{
-					printf("There is no space left in the array!\n");
+					printf("There is no space left in the adt!\n");
 				}
 				else
 				{
 					printf("Type the key you want to include: \n");
 					get_int(&key);
-					insert_sort(&array, key);
+					insert_sort(&adt, key);
 				}
 			}break;
 
@@ -373,7 +373,7 @@ int main(int argc, char **argv)
 				printf("Type the position of the element you want to remove: \n");
 				get_int(&position);
 
-				delete_by_position(&array, position);
+				delete_by_position(&adt, position);
 
 			}break;
 
@@ -399,16 +399,16 @@ int main(int argc, char **argv)
 						{	
 							int position;
 
-							position = linear_search(&array, key);
-							transposition(&array, position);
+							position = linear_search(&adt, key);
+							transposition(&adt, position);
 							printf("Key %d is set on position %d\n", key, position);
 						}
 						else if(op == 'H' || op == 'h')
 						{
 							int position;
 
-							position = linear_search(&array, key);
-							move_to_head(&array, position);							
+							position = linear_search(&adt, key);
+							move_to_head(&adt, position);							
 							printf("Key %d is set on position %d\n", key, position);
 						}
 
@@ -417,7 +417,7 @@ int main(int argc, char **argv)
 					case 'B':
 					case 'b':
 					{
-						position = binary_search(&array, key);
+						position = binary_search(&adt, key);
 
 						printf("Key %d is set on position %d\n", key, position);
 					}break;
@@ -443,7 +443,7 @@ int main(int argc, char **argv)
 			case 'R':
 			case 'r':
 			{
-				reverse_array(&array);
+				reverse_adt(&adt);
 			}break;
 
 			case 'T':
