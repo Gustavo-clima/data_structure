@@ -7,7 +7,7 @@ typedef struct
 {
 	int *array;
 	int lenght;
-	int end;
+	int last_position;
 }ARRAY;
 
 void get_int(int *integer)
@@ -24,7 +24,7 @@ void display_array(ARRAY adt)
 
 	printf("\n");
 
-	for (i = 0; i <= adt.end; ++i)
+	for (i = 0; i <= adt.last_position; ++i)
 	{
 		printf("  %d  ", adt.array[i]);
 		printf("|");
@@ -33,7 +33,7 @@ void display_array(ARRAY adt)
 
 bool isEmpty(ARRAY adt)
 {
-	if(adt.end == (-1))
+	if(adt.last_position == (-1))
 	{
 		return true;
 	}
@@ -45,7 +45,7 @@ bool isEmpty(ARRAY adt)
 
 bool isFull(ARRAY adt)
 {
-	if(adt.end >= (adt.lenght - 1))
+	if(adt.last_position >= (adt.lenght - 1))
 	{
 		return true;
 	}
@@ -59,7 +59,7 @@ bool isSorted(ARRAY *adt)
 {
 	int i;
 
-	for (i = 0; i <= adt->end; ++i)
+	for (i = 0; i <= adt->last_position; ++i)
 	{
 		if(adt->array[i] > adt->array[i])
 		{
@@ -74,7 +74,7 @@ void insert_sort(ARRAY *adt, int key)
 {
 	int i;
 
-	i = (adt->end);
+	i = (adt->last_position);
 
 	while(adt->array[i] > key)
 	{
@@ -84,7 +84,7 @@ void insert_sort(ARRAY *adt, int key)
 	}
 
 	adt->array[i + 1] = key;
-	++adt->end;
+	++adt->last_position;
 }
 
 void set(ARRAY *adt, int key, int position)
@@ -97,35 +97,35 @@ int get(ARRAY *adt, int position)
 	return adt->array[position];
 }
 
-void append(ARRAY *adt, int key)
+void applast_position(ARRAY *adt, int key)
 {
-	adt->array[adt->end + 1] = key;
-	++adt->end;
+	adt->array[adt->last_position + 1] = key;
+	++adt->last_position;
 }
 
 void delete_by_position(ARRAY *adt, int position)
 {
 	int i;
 
-	for (i = position; i < adt->end; ++i)
+	for (i = position; i < adt->last_position; ++i)
 	{
 		adt->array[i] = adt->array[i + 1];
 	}
 
-	--adt->end;
+	--adt->last_position;
 }
 
 void insert_on_position(ARRAY *adt, int key, int position)
 {
 	int i;
 
-	for (i = adt->end; i >= position; --i)
+	for (i = adt->last_position; i >= position; --i)
 	{
 		adt->array[i + 1] = adt->array[i];
 	}
 
 	adt->array[position] = key;
-	++adt->end;
+	++adt->last_position;
 }
 
 void initialize_adt(ARRAY *adt, char **elements)
@@ -140,14 +140,14 @@ void initialize_adt(ARRAY *adt, char **elements)
 		adt->array[i] = atoi(elements[i + 3]);
 	}
 
-	adt->end = (qtd_of_elements - 1);
+	adt->last_position = (qtd_of_elements - 1);
 }
 
 void create_adt(ARRAY *adt, int lenght)
 {
 	adt->array = (int *)malloc(lenght * sizeof(int));
 	
-	adt->end = -1;
+	adt->last_position = -1;
 	adt->lenght = lenght;
 }
 
@@ -175,7 +175,7 @@ int linear_search(ARRAY *adt, int key)
 {
 	int i;
 
-	for (i = 0; i <= adt->end; ++i)
+	for (i = 0; i <= adt->last_position; ++i)
 	{
 		if(key == adt->array[i])
 		{
@@ -191,7 +191,7 @@ int binary_search(ARRAY *adt, int key)
 	int middle;
 
 	first = 0;
-	last = adt->end;
+	last = adt->last_position;
 
 	while(first <= last)
 	{
@@ -218,7 +218,7 @@ void reverse_adt(ARRAY *adt)
 	int j;
 	int tmp;
 
-	for (i = 0, j = adt->end; i <= (adt->end / 2); ++i, --j)
+	for (i = 0, j = adt->last_position; i <= (adt->last_position / 2); ++i, --j)
 	{
 		tmp = adt->array[i]; 
 		adt->array[i] = adt->array[j];
@@ -231,7 +231,7 @@ char menu()
 	char user_input[10];
 
 	printf("(P) - Print\n");
-	printf("(A) - Add/Append\n");
+	printf("(A) - Add/Applast_position\n");
 	printf("(I) - Insert into position\n");
 	printf("(Q) - Insert sort\n");
 	printf("(D) - Delete\n");
@@ -322,7 +322,7 @@ int main(int argc, char **argv)
 					printf("Type the key you want to include: \n");
 					get_int(&key);
 
-					append(&adt, key);
+					applast_position(&adt, key);
 				}
 			}break;
 
