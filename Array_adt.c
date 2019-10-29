@@ -55,6 +55,38 @@ bool isFull(ARRAY array)
 	}
 }
 
+bool isSorted(ARRAY *array)
+{
+	int i;
+
+	for (i = 0; i <= array->end; ++i)
+	{
+		if(array->array_pointer[i] > array->array_pointer[i])
+		{
+			return false;
+		}
+
+		return true;
+	}
+}
+
+void insert_sort(ARRAY *array, int key)
+{
+	int i;
+
+	i = (array->end);
+
+	while(array->array_pointer[i] > key)
+	{
+		array->array_pointer[i + 1] = array->array_pointer[i];
+
+		--i;
+	}
+
+	array->array_pointer[i + 1] = key;
+	++array->end;
+}
+
 void set(ARRAY *array, int key, int position)
 {
 	array->array_pointer[position] = key;
@@ -71,11 +103,11 @@ void append(ARRAY *array, int key)
 	++array->end;
 }
 
-void delete_by_index(ARRAY *array, int index)
+void delete_by_position(ARRAY *array, int position)
 {
 	int i;
 
-	for (i = index; i < array->end; ++i)
+	for (i = position; i < array->end; ++i)
 	{
 		array->array_pointer[i] = array->array_pointer[i + 1];
 	}
@@ -129,14 +161,14 @@ void swap(ARRAY **array, int source, int destination)
 	(*array)->array_pointer[source] = aux;
 }
 
-void transposition(ARRAY *array, int index)
+void transposition(ARRAY *array, int position)
 {
-	swap(&array, index, (index - 1));
+	swap(&array, position, (position - 1));
 }
 
-void move_to_head(ARRAY *array, int index)
+void move_to_head(ARRAY *array, int position)
 {
-	swap(&array, index, 0);
+	swap(&array, position, 0);
 }
 
 int linear_search(ARRAY *array, int key)
@@ -200,7 +232,8 @@ char menu()
 
 	printf("(P) - Print\n");
 	printf("(A) - Add/Append\n");
-	printf("(I) - Insert Into index\n");
+	printf("(I) - Insert into position\n");
+	printf("(Q) - Insert sort\n");
 	printf("(D) - Delete\n");
 	printf("(S) - Search\n");
 	printf("(M) - Max\n");
@@ -245,17 +278,17 @@ int main(int argc, char **argv)
 
 	if(argc < 3)
 	{
-		printf("Invalid numbers of arguments\n");
+		printf("Invalid numbers of arguments.\n");
 		return 1;
 	}
 	else if(atoi(argv[2]) != (argc - 3))
 	{
-		printf("Number of numbers has do match inital array size\n");
+		printf("Number of numbers has to match inital array size.\n");
 		return 1;
 	}
 	else if(atoi(argv[2]) > atoi(argv[1]))
 	{
-		printf("Too many characters for the array size\n");
+		printf("Too many characters for the array.\n");
 		return 1;
 	}
 
@@ -264,7 +297,7 @@ int main(int argc, char **argv)
 
 	do
 	{
-		// system("clear");
+		system("clear");
 		op = menu();
 
 		switch(op)
@@ -282,11 +315,11 @@ int main(int argc, char **argv)
 				
 				if(isFull(array))
 				{
-					printf("Array is full!\n");
+					printf("There is no space left in the array!\n");
 				}
 				else
 				{
-					printf("Insert the key do you want to include: \n");
+					printf("Type the key you want to include: \n");
 					get_int(&key);
 
 					append(&array, key);
@@ -297,33 +330,50 @@ int main(int argc, char **argv)
 			case 'i':
 			{
 				int key;
-				int index;
+				int position;
 
 				if(isFull(array))
 				{
-					printf("Array is full!\n");
+					printf("There is no space left in the array!\n");
 				}
 				else
 				{
-					printf("Insert the key do you want to include: \n");
+					printf("Type the key you want to include: \n");
 					get_int(&key);
 					printf("The postion to be inserted: \n");
-					get_int(&index);
-					insert_on_position(&array, key, index);
+					get_int(&position);
+					insert_on_position(&array, key, position);
 				}
 
 
 			}break;
 
+			case 'Q':
+			case 'q':
+			{
+				int key;
+
+				if(isFull(array))
+				{
+					printf("There is no space left in the array!\n");
+				}
+				else
+				{
+					printf("Type the key you want to include: \n");
+					get_int(&key);
+					insert_sort(&array, key);
+				}
+			}break;
+
 			case 'D':
 			case 'd':
 			{
-				int index;
+				int position;
 
-				printf("Insert the index of the element do you want do remove: \n");
-				get_int(&index);
+				printf("Type the position of the element you want to remove: \n");
+				get_int(&position);
 
-				delete_by_index(&array, index);
+				delete_by_position(&array, position);
 
 			}break;
 
@@ -331,7 +381,7 @@ int main(int argc, char **argv)
 			case 's':
 			{
 				int key;
-				int index;
+				int position;
 
 				printf("Key to be found: ");
 				get_int(&key);
@@ -347,19 +397,19 @@ int main(int argc, char **argv)
 						system("clear");
 						if(op == 'T' || op == 't')
 						{	
-							int index;
+							int position;
 
-							index = linear_search(&array, key);
-							transposition(&array, index);
-							printf("Key %d is set on index %d\n", key, index);
+							position = linear_search(&array, key);
+							transposition(&array, position);
+							printf("Key %d is set on position %d\n", key, position);
 						}
 						else if(op == 'H' || op == 'h')
 						{
-							int index;
+							int position;
 
-							index = linear_search(&array, key);
-							move_to_head(&array, index);							
-							printf("Key %d is set on index %d\n", key, index);
+							position = linear_search(&array, key);
+							move_to_head(&array, position);							
+							printf("Key %d is set on position %d\n", key, position);
 						}
 
 					}break;
@@ -367,9 +417,9 @@ int main(int argc, char **argv)
 					case 'B':
 					case 'b':
 					{
-						index = binary_search(&array, key);
+						position = binary_search(&array, key);
 
-						printf("Key %d is set on index %d\n", key, index);
+						printf("Key %d is set on position %d\n", key, position);
 					}break;
 					default:
 					{
