@@ -1,4 +1,4 @@
-program [array lenght] [array size] {[array element 1] [array element 2] ...}
+program [array lenght] [array size] {[element 1] [element 2] ...}
 
 example: ./array_adt 10 5 1 2 3 4 5
 
